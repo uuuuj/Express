@@ -6,11 +6,15 @@ const TodoSchema = new mongoose.Schema({
     order: Number
 });
 
-TodoSchema.virtual("todoId").get(function() {
+TodoSchema
+    .virtual("todoId")
+    .get(function() {
     return this._id.toHexString();
 });
 //JSON 타입으로 Schema를 변환할 때 가상값(virtual)을 반환하도록 설정하는 것
-TodoSchema.set("toJSON", {
+TodoSchema
+    .set("toJSON", {
     virtuals: true,
 });
+//TodoSchema를 Todo라고 부르고 쓰겠다
 module.exports = mongoose.model("Todo", TodoSchema);

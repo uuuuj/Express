@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const Todo = require("./models/todo");
+const Todo = require("../models/todo");
 
 router.get("/", (req, res) => {
   res.send("Hi! api");
@@ -71,36 +71,32 @@ router.patch("/todos/:todoId", async (req, res) => {
     const { todoId } = req.params;
     const { value } = req.body;
     const { done } = req.body;
+    //Id를 기반으로 찾는다
+    const currentTodo = await Todo.findById(todoId);
 
-    const modifyTodo = await Todo.findById(todoId);
-
-    if(!modifyTodo) {
+    if(!currentTodo) {
         throw new Error("존재하지 않는 todo 데이터 입니다.");
     }
-    
-    if(modifyTodo) {
-        await Todo.updateOne({ todoId: todoId}, {$set: { value }});
-    }
 
-    res.send({});
-})
-
-//체크 박스 수정 API
-router.patch("/todos/:todoId", async (req, res) => {
-    const { todoId } = req.params;
-    const { done } = req.body;
-
-    const modifyTodo = await Todo.findById(todoId);
-
-    if(modifyTodo) {
-        if(done == true){
-            await Todo.updateOne({ todoId: todoId }, { $set: { done } });
-        } else{
-            await Todo.updateOne({ todoId: todoId }, { $set: { done } });
+    if(order) {
+        //_id : A.order : _id : B.order => A.order = B.order and B.order = A.order
+        const targetTodo = await Todo.findOne({ order }).exec();
+        console.log(currentTodo);
+        //만약 targetTodo를 찾았다면
+        if(targetTodo) {
+            targetTodo.order = currentTodo.order;
+            await targetTodo.save();
         }
-        
+        currentTodo.order = order;
+
+    } else if (value) {
+        currentTodo.value = value;
+    } else if (done != undefined) {
+        currentTodo.doneAt = done ? new Date() : null;
     }
+
+    await currentTodo.save();
     res.send({});
-})
+});
 
 module.exports = router;
