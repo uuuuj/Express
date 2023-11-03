@@ -6,6 +6,7 @@ const postsRouter = require("./routes/posts");
 //loaclhost:3000/api -> postsRouter
 app.use("/api", [postsRouter]);
 
+//NOTE - Swagger 연동 코드
 const { swaggerUi, specs } = require("./swagger/swagger");
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs))

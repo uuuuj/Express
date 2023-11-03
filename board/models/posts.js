@@ -3,7 +3,7 @@
 //NOTE - JS에서 MySQL의 테이블을 사용하기 위한 다리 역할을 수행한다
 'use strict';
 const {
-  Model
+  Model, Sequelize
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Posts extends Model {
@@ -24,21 +24,26 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER
     },
     title: {
+      allowNull: false,
       type: DataTypes.STRING
     },
     content: {
+      allowNull: false,
       type: DataTypes.STRING
     },
     password: {
+      allowNull: false,
       type: DataTypes.STRING
     },
     createdAt: {
       allowNull: false,
-      type: DataTypes.DATE
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW
     },
     updatedAt: {
       allowNull: false,
-      type: DataTypes.DATE
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW
     }
   }, {
     sequelize,
