@@ -27,9 +27,11 @@ const router = express.Router();
    *    description: "게시글 관련 API"
    * 
    *    */
-  router.get("/posts", (req, res) => {
-    
-    res.json({ posts: posts });
+  router.get("/posts", async (req, res) => {
+    const posts = await Posts.findAll({
+      order: [["createdAt", 'DESC']]
+    });
+    res.json({ data: posts });
   });
 
  /**
