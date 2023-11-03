@@ -96,4 +96,20 @@ router.put('/posts/:postid', async (req, res) => {
   res.status(200).json({ data: "게시글이 수정되었습니다." });
 });
 
+//NOTE - 게시글 삭제 API
+router.delete('/posts/:postid', async (req, res) => {
+  const { postid } = req.params;
+  const { password } = req.body;
+
+  const post = await Posts.findOne({ where: { postid } });
+  if(!post) {
+    return res.status(404).json({ message: '게시글이 존재하지 않습니다.' });
+  }else if (post.password !== password) {
+    return res.status(401).json({ message: '비밀번호가 일치하지 않습니다.' });
+  }
+
+  await Posts.destroy({ where: { postid } });
+  
+  res.status(200).json({ data: "게시글이 삭제되었습니다." });
+});
   module.exports = router;
