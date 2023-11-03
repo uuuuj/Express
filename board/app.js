@@ -3,13 +3,13 @@ const app = express();
 const port = 3000;
 const postsRouter = require("./routes/posts");
 
+app.use(express.json());
 //loaclhost:3000/api -> postsRouter
 app.use("/api", [postsRouter]);
 
 //NOTE - Swagger 연동 코드
 const { swaggerUi, specs } = require("./swagger/swagger");
-
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs))
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 
 // route 페이지
 app.get('/', (req, res) => {

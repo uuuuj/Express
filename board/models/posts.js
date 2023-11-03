@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Posts.init({
-    id: {
+    postid: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
@@ -30,6 +30,10 @@ module.exports = (sequelize, DataTypes) => {
     content: {
       allowNull: false,
       type: DataTypes.STRING
+    },
+    writer: {
+      allowNull: false,
+      type: DataTypes.STRING,
     },
     password: {
       allowNull: false,
