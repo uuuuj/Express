@@ -94,6 +94,9 @@ router.get('/posts/:postid', async (req, res) => {
     attributes: ["postid", "title", "content", "createdAt", "updatedAt"],
     where: { postid }
   });
+  if(!post) {
+    return res.status(404).json({ message: "삭제되었거나 없는 게시물입니다." });
+  }
 
   res.status(200).json({ data: post });
 });
