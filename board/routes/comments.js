@@ -40,8 +40,15 @@ router.post("/posts/:postid/comments", async (req, res) => {
 router.put("/comments/:commentId", async (req, res) => {
     const { commentId } = req.params;
     const { content } = req.body;
-
+    
+    if(!content) {
+        return res.json({ message: "댓글 내용을 입력해주세요" });
+    } 
     const comment = await Comment.findOne({ where: { commentId } });
+    if(!comment) {
+        return res.status(404).json({ message: "댓글을 찾을 수 없습니다." });
+    }
+    
     await Comment.update(
         {content},
         {
@@ -49,6 +56,7 @@ router.put("/comments/:commentId", async (req, res) => {
         }
     );
     res.status(200).json({ data: "댓글이 수정되었습니다." });
+
 });
 
 module.exports = router;
