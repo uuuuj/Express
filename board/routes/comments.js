@@ -62,4 +62,17 @@ router.put("/comments/:commentId", async (req, res) => {
 
 });
 
+router.delete('/comments/:commentId', async (req, res) => {
+    const { commentId } = req.params;
+
+    const comment = await Comment.findOne({ where: { commentId } });
+    if(!comment) {
+        return res.status(404).json({ message: "댓글을 찾을 수 없습니다." });
+    }
+
+    await Comment.destroy({ where: { commentId } });
+
+    res.status(200).json({ data: "댓글이 삭제되었습니다." });
+});
+
 module.exports = router;
