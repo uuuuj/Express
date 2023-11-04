@@ -11,7 +11,11 @@ const router = express.Router();
 
 router.get("/posts/:postid/comments", async (req, res) => {
     const { postid } = req.params;
+    const post = await Posts.findOne({ where: {postid } });
 
+    if(!post) {
+        return res.status(404).json({ message: '삭제되었거나 없는 게시물입니다.' });
+    }
     const comments = await Comment.findAll({
         attributes: ["commentId", "writer", "content", "createdAt", "updatedAt"],
         where: { postid }
