@@ -31,9 +31,14 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.STRING
     },
-    writer: {
-      allowNull: false,
-      type: DataTypes.STRING,
+    userId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'Users',
+        key: 'userId'
+      },
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
     },
     password: {
       allowNull: false,
