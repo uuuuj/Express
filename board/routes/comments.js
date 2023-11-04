@@ -29,12 +29,14 @@ router.post("/posts/:postid/comments", async (req, res) => {
     const { postid } = req.params;
     const { writer, content } = req.body;
     const post = await Posts.findOne({ where: { postid } });
-
     if(!post) {
         return res.status(404).json({ message: '게시글이 존재하지 않습니다.' });
     }
+    if(!content) {
+        return res.json({ message: "댓글 내용을 입력해주세요" });
+    }
     const comment = await Comment.create({ postid, writer, content });
-
+    
     res.status(201).json({ data: comment });
 });
 
