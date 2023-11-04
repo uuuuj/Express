@@ -37,4 +37,18 @@ router.post("/posts/:postid/comments", async (req, res) => {
     res.status(201).json({ data: comment });
 });
 
+router.put("/comments/:commentId", async (req, res) => {
+    const { commentId } = req.params;
+    const { content } = req.body;
+
+    const comment = await Comment.findOne({ where: { commentId } });
+    await Comment.update(
+        {content},
+        {
+            where: { commentId }
+        }
+    );
+    res.status(200).json({ data: "댓글이 수정되었습니다." });
+});
+
 module.exports = router;
