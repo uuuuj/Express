@@ -1,5 +1,6 @@
 const express = require("express");
 const { Comment } = require("../models");
+const { Posts } = require("../models/");
 const router = express.Router();
 
 // 댓글 조회 (해당 게시물의 모든 댓글): GET /posts/:postid/comments
@@ -22,6 +23,11 @@ router.get("/posts/:postid/comments", async (req, res) => {
 router.post("/posts/:postid/comments", async (req, res) => {
     const { postid } = req.params;
     const { writer, content } = req.body;
+    const post = await Posts.findOne({ where: { postid } });
+
+    if(!post) {
+        return res.status(404).json({ message: '게시글이 존재하지 않습니다.' });
+    }
     const comment = await Comment.create({ postid, writer, content });
 
     res.status(201).json({ data: comment });
