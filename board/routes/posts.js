@@ -58,7 +58,7 @@ const router = express.Router();
 router.post("/posts", async (req, res) => {
   const { title, content, writer, password } = req.body;
   const post = await Posts.create({ title, content, writer, password });
-
+  console.log(res);
   res.status(201).json({ data: post });
 });
 

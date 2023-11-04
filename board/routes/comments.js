@@ -18,7 +18,8 @@ router.get("/posts/:postid/comments", async (req, res) => {
     }
     const comments = await Comment.findAll({
         attributes: ["commentId", "writer", "content", "createdAt", "updatedAt"],
-        where: { postid }
+        where: { postid },
+        order: [["createdAt", 'DESC']]
     });
     res.status(200).json({ data : comments });
 
