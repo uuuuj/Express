@@ -11,18 +11,18 @@ const router = express.Router();
    *    get: 
    *      summary: "전체 게시글 조회"
    *      description: "등록된 모든 게시글을 조회한다"
-   *      response:
+   *      responses:
    *        200:
    *          description: A list of posts.
    *          content:
    *            application/json:
    *              schema:
-   *                type: dbject
+   *                type: object
    *                properties:
    *                  posts:
    *                    type: array
    *                    items:
-   *                      $ref: "#/components/schemas/Post"
+   *                      $ref: "#/models/Posts"
    * tags:
    *  - name: Posts
    *    description: "게시글 관련 API"
@@ -46,14 +46,14 @@ const router = express.Router();
  *      content:
  *        application/json:
  *          schema:
- *            $ref: '#/components/schemas/Post'
+ *            $ref: '#/models/Posts'
  *    responses:
  *      201:
  *        description: Created post data.
  *        content:
  *          application/json:
  *            schema:
- *              $ref: '#/components/schemas/Post'
+ *              $ref: '#/models/Posts'
  */
 router.post("/posts", async (req, res) => {
   const { title, content, writer, password } = req.body;
@@ -63,6 +63,31 @@ router.post("/posts", async (req, res) => {
 });
 
 //NOTE - 게시글 상세 조회 API
+  //게시글 상세 조회 API
+  /**
+   * @swagger 
+   * paths:
+   *  /api/posts/:postid:
+   *    get: 
+   *      summary: "게시글 상세 조회"
+   *      description: "postid를 통해 게시글을 조회한다"
+   *      responses:
+   *        200:
+   *          description: 
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                  posts:
+   *                    type: array
+   *                    items:
+   *                      $ref: "#/models/Posts"
+   * tags:
+   *  - name: Posts
+   *    description: "게시글 관련 API"
+   * 
+   *    */
 router.get('/posts/:postid', async (req, res) => {
   const { postid } = req.params;
   const post = await Posts.findOne({
@@ -74,6 +99,31 @@ router.get('/posts/:postid', async (req, res) => {
 });
 
 //NOTE - 게시글 수정 API
+  //게시글 수정 API
+  /**
+   * @swagger 
+   * paths:
+   *  /api/posts/:postid:
+   *    put: 
+   *      summary: "게시글 수정"
+   *      description: "postid와 password를 통해 title, content를 수정한다"
+   *      responses:
+   *        200:
+   *          description: 
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                  posts:
+   *                    type: array
+   *                    items:
+   *                      $ref: "#/models/Posts"
+   * tags:
+   *  - name: Posts
+   *    description: "게시글 관련 API"
+   * 
+   *    */
 router.put('/posts/:postid', async (req, res) => {
   const { postid } = req.params;
   const { title, content, password } = req.body;
@@ -97,6 +147,31 @@ router.put('/posts/:postid', async (req, res) => {
 });
 
 //NOTE - 게시글 삭제 API
+  //게시글 삭제 API
+  /**
+   * @swagger 
+   * paths:
+   *  /api/posts/:postid:
+   *    delete: 
+   *      summary: "게시글 삭제"
+   *      description: "postid를 통해 게시글을 조회하고, 비밀번호 입력해서 게시글 삭제"
+   *      responses:
+   *        200:
+   *          description: 
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                  posts:
+   *                    type: array
+   *                    items:
+   *                      $ref: "#/models/Posts"
+   * tags:
+   *  - name: Posts
+   *    description: "게시글 관련 API"
+   * 
+   *    */
 router.delete('/posts/:postid', async (req, res) => {
   const { postid } = req.params;
   const { password } = req.body;
@@ -109,7 +184,7 @@ router.delete('/posts/:postid', async (req, res) => {
   }
 
   await Posts.destroy({ where: { postid } });
-  
+
   res.status(200).json({ data: "게시글이 삭제되었습니다." });
 });
   module.exports = router;
