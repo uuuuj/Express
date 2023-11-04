@@ -11,14 +11,48 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      this.hasMany(models.Posts, {
+        sourceKey: 'userId',
+        foreignKey: 'userId'
+      });
+      this.hasMany(models.Comment, {
+        sourceKey: 'userId',
+        foreignKey: 'userId'
+      })
     }
   }
-  Users.init({
-    email: DataTypes.STRING,
-    password: DataTypes.STRING
-  }, {
-    sequelize,
-    modelName: 'Users',
-  });
+  Users.init(
+    {
+      userId: {
+        allowNull: false, // NOT NULL
+        autoIncrement: true, // AUTO_INCREMENT
+        primaryKey: true, // Primary Key (기본키)
+        type: DataTypes.INTEGER,
+      },
+      email: {
+        allowNull: false, // NOT NULL
+        type: DataTypes.STRING,
+        unique: true,
+      },
+      password: {
+        allowNull: false, // NOT NULL
+        type: DataTypes.STRING,
+      },
+      createdAt: {
+        allowNull: false, // NOT NULL
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+      },
+      updatedAt: {
+        allowNull: false, // NOT NULL
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+      },
+    },
+    {
+      sequelize,
+      modelName: 'Users',
+    }
+  );
   return Users;
 };
