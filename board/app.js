@@ -3,13 +3,13 @@ const app = express();
 const port = 3000;
 const postsRouter = require("./routes/posts");
 const commentsRouter = require("./routes/comments");
-const { sequelize } = require('./models/index.js');
+// const { sequelize } = require('./models/index.js');
 
-async function main() {
-    await sequelize.sync({ force: true });
-}
+// async function main() {
+//     await sequelize.sync({ force: true });
+// }
 
-main();
+// main();
 
 app.use(express.json());
 //loaclhost:3000/api -> postsRouter
