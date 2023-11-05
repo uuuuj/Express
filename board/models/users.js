@@ -11,10 +11,16 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      this.hasOne(models.UserInfos, {
+        sourceKey: 'userId',
+        foreignKey: 'userId',
+      });
+
       this.hasMany(models.Posts, {
         sourceKey: 'userId',
         foreignKey: 'userId'
       });
+
       this.hasMany(models.Comment, {
         sourceKey: 'userId',
         foreignKey: 'userId'
@@ -29,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true, // Primary Key (기본키)
         type: DataTypes.INTEGER,
       },
-      email: {
+      nickname: {
         allowNull: false, // NOT NULL
         type: DataTypes.STRING,
         unique: true,
