@@ -8,7 +8,7 @@ http://bumkyulee.store/
 __Express.js__     
 __MySQL__
 
-# 필수 요구 사항 및 추가 요구 사항 구현 완료
+## 필수 요구 사항 및 추가 요구 사항 구현 완료
 ## API 명세
 http://bumkyulee.store/api-docs
 
