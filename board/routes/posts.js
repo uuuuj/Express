@@ -103,6 +103,10 @@ router.get('/posts/:postid', async (req, res) => {
   const { postid } = req.params;
   const post = await Posts.findOne({
     attributes: ["postid", "title", "content", "createdAt", "updatedAt"],
+    include: [{
+      model: Users,
+      attributes: ["nickname"],
+    }],
     where: { postid }
   });
   if(!post) {
