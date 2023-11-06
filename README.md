@@ -1,9 +1,6 @@
 # Express
 __정글 7기 이유정 WEEK 13 나만무 준비 Express 공부 레포지__   
 
-# Demo Link
-http://bumkyulee.store/   
-
 # 사용 Tools 
 __Express.js__     
 __MySQL__   
@@ -37,7 +34,7 @@ __Swaager__
 ## ERD   
 ![image](https://github.com/uuuuj/Express/assets/105343092/90173db4-7ae8-46ba-8f7e-429b6f580382)    
 
-## API 명세
+## API 명세 (demo link)
 http://bumkyulee.store/api-docs   
 
 # Git Issue & Project 활용하여 Git 협업 연습   
