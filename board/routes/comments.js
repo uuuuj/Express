@@ -15,10 +15,17 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/posts/4/comments:
+ * /api/posts/{postid}/comments:
  *   get:
  *     summary: 댓글 조회
  *     description: 해당 게시물의 모든 댓글을 조회합니다.
+ *     parameters:
+ *        - in: path
+ *          name: postid
+ *          required: true
+ *          schema:
+ *            type: integer
+ *          description: Unique identifier of the post
  *     tags:
  *       - Comments
  *     requestBody:
@@ -67,10 +74,17 @@ router.get("/posts/:postid/comments", async (req, res) => {
 
 /**
  * @swagger
- * /api/posts/4/comments:
+ * /api/posts/{postid}/comments:
  *   post:
  *     summary: 댓글 작성
  *     description: "로그인 토큰을 검사하여, 유효한 토큰일 경우에만 댓글 작성 가능"
+ *     parameters:
+ *        - in: path
+ *          name: postid
+ *          required: true
+ *          schema:
+ *            type: integer
+ *          description: Unique identifier of the post
  *     tags:
  *       - Comments
  *     requestBody:
@@ -130,10 +144,17 @@ router.post("/posts/:postid/comments", authMiddleware, async (req, res) => {
 
 /**
  * @swagger
- * /api/comments/8:
+ * /api/comments/{commentId}:
  *   put:
  *     summary: 댓글 수정
  *     description: "로그인 토큰을 검사하여, 해당 사용자가 작성한 댓글만 수정 가능"
+ *     parameters:
+ *        - in: path
+ *          name: commentId
+ *          required: true
+ *          schema:
+ *            type: integer
+ *          description: Unique identifier of the comment 
  *     tags:
  *       - Comments
  *     requestBody:
@@ -195,10 +216,17 @@ router.put("/comments/:commentId", authMiddleware, async (req, res) => {
 });
 /**
  * @swagger
- * /api/comments/8:
+ * /api/comments/{commentId}:
  *   delete:
  *     summary: 댓글 삭제
  *     description: "로그인 토큰을 검사하여, 해당 사용자가 작성한 댓글만 삭제 가능"
+ *     parameters:
+ *        - in: path
+ *          name: commentId
+ *          required: true
+ *          schema:
+ *            type: integer
+ *          description: Unique identifier of the comment
  *     tags:
  *       - Comments
  *     requestBody:

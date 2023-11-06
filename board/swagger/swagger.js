@@ -12,9 +12,12 @@ const options = {
         },
         servers: [
             {
-                // url: "http://localhost:3000", //요청 URL
-                url: "http://bumkyulee.store"
+                url: "http://localhost:3000", //요청 URL
+                
             },
+            {
+                url: "http://bumkyulee.store"
+            }
         ],
     },
     apis: ["./routes/users.js", "./routes/posts.js", "./routes/comments.js", "./routes/index.js"], //Swagger 파일 연동

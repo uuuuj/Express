@@ -107,10 +107,17 @@ router.post("/posts", authMiddleware, async (req, res) => {
   /**
    * @swagger 
    * paths:
-   *  /api/posts/2:
+   *  /api/posts/{postid}:
    *    get: 
    *      summary: "게시글 상세 조회"
    *      description: "postid를 통해 게시글을 조회한다"
+   *      parameters:
+   *         - in: path
+   *           name: postid
+   *           required: true
+   *           schema:
+   *             type: integer
+   *           description: Unique identifier of the post
    *      tags:
    *       - Posts
    *      responses:
@@ -151,10 +158,17 @@ router.get('/posts/:postid', async (req, res) => {
 //NOTE - 게시글 수정 API
 /**
  * @swagger
- * /api/posts/11:
+ * /api/posts/{postid}:
  *   put:
  *     summary: 게시글 수정
  *     description: "로그인 토큰을 검사하여, 해당 사용자가 작성한 게시글만 수정 가능"
+ *     parameters:
+ *        - in: path
+ *          name: postid
+ *          required: true
+ *          schema:
+ *            type: integer
+ *          description: Unique identifier of the post
  *     tags:
  *       - Posts
  *     requestBody:
@@ -219,10 +233,17 @@ router.put('/posts/:postid', authMiddleware, async (req, res) => {
   //게시글 삭제 API
 /**
  * @swagger
- * /api/posts/11:
+ * /api/posts/{postid}:
  *   delete:
  *     summary: 게시글 삭제
  *     description: "로그인 토큰을 검사하여, 해당 사용자가 작성한 게시글만 삭제 가능"
+ *     parameters:
+ *        - in: path
+ *          name: postid
+ *          required: true
+ *          schema:
+ *            type: integer
+ *          description: Unique identifier of the post
  *     tags:
  *       - Posts
  *     requestBody:
