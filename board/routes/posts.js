@@ -1,8 +1,10 @@
 const express = require("express");
 const { Posts } = require("../models");
+const { Users } = require("../models");
 const { Op } = require("sequelize");
+const authMiddleware = require("../middlewares/auth-middleware");
 const router = express.Router();
-  
+
   //전체 게시글 조회 API
   /**
    * @swagger 
@@ -30,6 +32,10 @@ const router = express.Router();
    *    */
   router.get("/posts", async (req, res) => {
     const posts = await Posts.findAll({
+      include: [{
+        model: Users,
+        attributes: ["nickname"],
+      }],
       order: [["createdAt", 'DESC']]
     });
     res.json({ data: posts });
@@ -55,10 +61,15 @@ const router = express.Router();
  *            schema:
  *              $ref: '#/models/Posts'
  */
-router.post("/posts", async (req, res) => {
-  const { title, content, writer, password } = req.body;
-  const post = await Posts.create({ title, content, writer, password });
-  console.log(res);
+router.post("/posts", authMiddleware, async (req, res) => {
+  const { userId } = res.locals.user;
+  const { title, content } = req.body;
+  const post = await Posts.create({ 
+    userId: userId,
+    title, 
+    content
+  });
+
   res.status(201).json({ data: post });
 });
 

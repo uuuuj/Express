@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       // 1. UserInfos 모델에서
       this.belongsTo(models.Users, { // 2. Users 모델에게 1:1 관계 설정을 합니다.
         targetKey: 'userId', // 3. Users 모델의 userId 컬럼을
-        foreignKey: 'UserId', // 4. UserInfos 모델의 UserId 컬럼과 연결합니다.
+        foreignKey: 'userId', // 4. UserInfos 모델의 UserId 컬럼과 연결합니다.
       });
     }
   }
@@ -27,14 +27,13 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
       },
       userId: {
+        allowNull: false,
         type: DataTypes.INTEGER,
-      references: {
-        model: 'Users',
-        key: 'userId'
-      },
-      onUpdate: 'CASCADE',
-      onDelete: 'SET NULL',
-      unique: true, // UNIQUE
+        unique: true,
+        references: {
+          model: 'Users',
+          key: 'userId'
+        },
       },
       name: {
         allowNull: false, // NOT NULL

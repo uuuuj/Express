@@ -2,45 +2,28 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const postsRouter = require("./routes/posts");
 const commentsRouter = require("./routes/comments");
+const usersRouter = require("./routes/users");
 const jwt = require('jsonwebtoken');
 const app = express();
 const port = 3000;
 
-//cookie-parser 미들웨어
-app.use(cookieParser());
-
 // const { sequelize } = require('./models/index.js');
 
 // async function main() {
-//     await sequelize.sync({ force: true });
+//   // model을 이용해 데이터베이스에 테이블을 삭제 후 생성합니다.
+//   await sequelize.sync({ force: true });
 // }
 
 // main();
+//cookie-parser 미들웨어
+app.use(cookieParser());
 
 app.use(express.json());
+
 //loaclhost:3000/api -> postsRouter
-app.use("/api", [postsRouter, commentsRouter]);
+app.use("/api", [postsRouter, commentsRouter, usersRouter]);
 app.use(express.urlencoded({ extended: false }));
 
-//cookie 할당
-app.get("/set", (req, res) => {
-    let expires = new Date();
-    expires.setMinutes(expires.getMinutes() + 60); // 만료 시간을 60분으로 설정합니다.
-  
-    res.cookie('name', 'nodejs', {
-      expires: expires
-    });
-    return res.status(200).end();
-  });
-
-//cookie-parser를 이용해 쿠키를 출력하는 API
-app.get('/get', (req, res) => {
-    //cookie를 불러오는 부분
-    const cookie = req.cookies;
-    console.log(cookie); // { name : 'sparta' }
-
-    return res.status(200).json({ cookie });
-});
 //NOTE - Swagger 연동 코드
 const { swaggerUi, specs } = require("./swagger/swagger");
 
@@ -51,51 +34,11 @@ app.get('/', (req, res) => {
     res.send('여기는 초기 페이지!');
 });
 
-//jwt 적용하지 않은 로그인 API
-// app.post('/login', function (req, res, next) {
-//     const user = {
-//         userId: 203,
-//         email: "tjdhf@naver.com",
-//         name: "박신양",
-//     }
-//     res.cookie('jungle', user); //jungle 이라는 이름을 가진 쿠키에 user 객체 할당
-    
-//     return res.status(200).end();
-// });
-
-//jwt 적용한 로그인 API
-// app.post('/login', async (req, res) => {
-//     const user = {
-//         userId: 203,
-//         email: "tjdhf@naver.com",
-//         name: "박신양",
-//     }
-
-//     //사용자 정보를 JWT로 생성
-//     const userJWT = await jwt.sign(user, 
-//         'secretOrPrivateKey',
-//         { expiresIn: "1h" }
-//     );
-
-//     res.cookie('jungle', 'Bearer ${userJWT}');
-//     return res.status(200).end();
+// app.get('/clear-cookie', (req, res) => {
+//     res.clearCookie('jungle');
+//     res.clearCookie('token');
+//     res.send('쿠키 삭제');
 // })
-
-//jwt를 할당한 cookie를 발급하는 API
-app.post('/set-key', (req, res) => {
-    const { key } = req.body;
-    const token = jwt.sign({ key }, "jungle");
-    res.cookie('token', token);
-    return res.status(200).end();
-
-})
-
-//jwt를 할당한 cookie를 조회하는 API
-app.get('/get-key', (req, res) => {
-    const { token } = req.cookies;
-    const { key } = jwt.decode(token);
-    return res.status(200).json({ key }); 
-})
 
 app.listen(port, () => {
     console.log(port, '포트로 서버가 열림');
