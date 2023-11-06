@@ -191,18 +191,22 @@ router.put('/posts/:postid', authMiddleware, async (req, res) => {
    *    description: "게시글 관련 API"
    * 
    *    */
-router.delete('/posts/:postid', async (req, res) => {
+router.delete('/posts/:postid', authMiddleware, async (req, res) => {
   const { postid } = req.params;
-  const { password } = req.body;
+  const { userId } = res.locals.user; 
 
   const post = await Posts.findOne({ where: { postid } });
   if(!post) {
     return res.status(404).json({ message: '게시글이 존재하지 않습니다.' });
-  }else if (post.password !== password) {
-    return res.status(401).json({ message: '비밀번호가 일치하지 않습니다.' });
+  }else if (post.userId !== userId) {
+    return res.status(401).json({ message: '권한이 없습니다.' });
   }
 
-  await Posts.destroy({ where: { postid } });
+  await Posts.destroy({ 
+    where: {
+      [Op.and]: [{ postid }, {userId: userId}],
+    }
+  });
 
   res.status(200).json({ data: "게시글이 삭제되었습니다." });
 });
