@@ -130,7 +130,7 @@ router.post("/posts/:postid/comments", authMiddleware, async (req, res) => {
 
 /**
  * @swagger
- * /api/comments/2:
+ * /api/comments/8:
  *   put:
  *     summary: 댓글 수정
  *     description: "로그인 토큰을 검사하여, 해당 사용자가 작성한 댓글만 수정 가능"
@@ -195,7 +195,7 @@ router.put("/comments/:commentId", authMiddleware, async (req, res) => {
 });
 /**
  * @swagger
- * /api/comments/2:
+ * /api/comments/8:
  *   delete:
  *     summary: 댓글 삭제
  *     description: "로그인 토큰을 검사하여, 해당 사용자가 작성한 댓글만 삭제 가능"
