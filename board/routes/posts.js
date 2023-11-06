@@ -142,22 +142,23 @@ router.get('/posts/:postid', async (req, res) => {
    *    description: "게시글 관련 API"
    * 
    *    */
-router.put('/posts/:postid', async (req, res) => {
+router.put('/posts/:postid', authMiddleware, async (req, res) => {
   const { postid } = req.params;
-  const { title, content, password } = req.body;
+  const { userId } = res.locals.user; 
+  const { title, content } = req.body;
 
   const post = await Posts.findOne({ where: { postid } });
   if(!post) {
     return res.status(404).json({ message: '게시글이 존재하지 않습니다.' });
-  }else if (post.password !== password) {
-    return res.status(401).json({ message: '비밀번호가 일치하지 않습니다.' });
+  }else if (post.userId !== userId) {
+    return res.status(401).json({ message: '권한이 없습니다.' });
   }
 
   await Posts.update(
     { title, content },
     {
       where: {
-        [Op.and]: [{ postid }, [{ password }]],
+        [Op.and]: [{ postid }, [{ userId: userId }]],
       }
     }
   );
