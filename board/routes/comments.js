@@ -1,6 +1,9 @@
 const express = require("express");
 const { Comment } = require("../models");
 const { Posts } = require("../models/");
+const { Users } = require("../models/");
+const { Op } = require("sequelize");
+const authMiddleware = require("../middlewares/auth-middleware");
 const router = express.Router();
 
 // 댓글 조회 (해당 게시물의 모든 댓글): GET /posts/:postid/comments
@@ -11,13 +14,15 @@ const router = express.Router();
 
 router.get("/posts/:postid/comments", async (req, res) => {
     const { postid } = req.params;
-    const post = await Posts.findOne({ where: {postid } });
+    
+
+    const post = await Posts.findOne({ where: { postid } });
 
     if(!post) {
         return res.status(404).json({ message: '삭제되었거나 없는 게시물입니다.' });
     }
     const comments = await Comment.findAll({
-        attributes: ["commentId", "writer", "content", "createdAt", "updatedAt"],
+        attributes: ["commentId", "content", "createdAt", "updatedAt"],
         where: { postid },
         order: [["createdAt", 'DESC']]
     });
@@ -25,22 +30,31 @@ router.get("/posts/:postid/comments", async (req, res) => {
 
 });
 
-router.post("/posts/:postid/comments", async (req, res) => {
+router.post("/posts/:postid/comments", authMiddleware, async (req, res) => {
+    const { userId } = res.locals.user;
     const { postid } = req.params;
-    const { writer, content } = req.body;
+    const { content } = req.body;
     const post = await Posts.findOne({ where: { postid } });
+
     if(!post) {
         return res.status(404).json({ message: '게시글이 존재하지 않습니다.' });
     }
+
     if(!content) {
         return res.json({ message: "댓글 내용을 입력해주세요" });
     }
-    const comment = await Comment.create({ postid, writer, content });
+
+    const comment = await Comment.create({ 
+        userId: userId,
+        postid, 
+        content 
+    });
     
     res.status(201).json({ data: comment });
 });
 
-router.put("/comments/:commentId", async (req, res) => {
+router.put("/comments/:commentId", authMiddleware, async (req, res) => {
+    const { userId } = res.locals.user;
     const { commentId } = req.params;
     const { content } = req.body;
     
@@ -55,22 +69,31 @@ router.put("/comments/:commentId", async (req, res) => {
     await Comment.update(
         {content},
         {
-            where: { commentId }
+            where: {
+                [Op.and]: [{ commentId }, [{ userId: userId }]],
+            }
         }
     );
     res.status(200).json({ data: "댓글이 수정되었습니다." });
 
 });
 
-router.delete('/comments/:commentId', async (req, res) => {
+router.delete('/comments/:commentId', authMiddleware, async (req, res) => {
     const { commentId } = req.params;
+    const { userId } = res.locals.user;
 
     const comment = await Comment.findOne({ where: { commentId } });
     if(!comment) {
         return res.status(404).json({ message: "댓글을 찾을 수 없습니다." });
+    } else if (comment.userId != userId){
+        return res.status(401).json({ message: '권한이 없습니다.' });
     }
 
-    await Comment.destroy({ where: { commentId } });
+    await Comment.destroy({ 
+    where: {
+      [Op.and]: [{ commentId }, { userId: userId }],
+        }
+    });
 
     res.status(200).json({ data: "댓글이 삭제되었습니다." });
 });
