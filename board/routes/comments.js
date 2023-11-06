@@ -12,6 +12,45 @@ const router = express.Router();
 // 댓글 수정: PUT /comments/:commentid
 // 댓글 삭제: DELETE /comments/:commentid
 
+
+/**
+ * @swagger
+ * /api/posts/4/comments:
+ *   get:
+ *     summary: 댓글 조회
+ *     description: 해당 게시물의 모든 댓글을 조회합니다.
+ *     tags:
+ *       - Comments
+ *     requestBody:
+ *       required: false
+ *     responses:
+ *       '200':
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: json
+ *                   example: 
+ *                        {
+ *                           postid: 1,
+ *                           title: "제목",
+ *                           content: "<p>내용</p>",
+ *                           userId: 3,
+ *                           createdAt: "2023-11-06T11:41:33.000Z",
+ *                           updatedAt: "2023-11-06T11:41:33.000Z",
+ *                           User: {
+ *                               nickname: "test"
+ *                                 }
+ *                        }
+ *       '400':
+ *         description: "요청의 형식이 잘못되었습니다. (예: 비밀번호나 닉네임 형식 불일치)"
+ *       '401':
+ *         description: 비밀번호와 비밀번호 확인이 일치하지 않습니다.
+ *       '409':
+ *         description: 닉네임이 이미 존재하거나 비밀번호가 닉네임을 포함합니다.
+ */
 router.get("/posts/:postid/comments", async (req, res) => {
     const { postid } = req.params;
     

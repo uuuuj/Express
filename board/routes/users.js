@@ -4,30 +4,47 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 
 /**
-* @swagger
-*
-* /api/users:
-*  post:
-*    summary: "회원가입 API"
-*    description: ""
-*    requestBody:
-*      description: 
-*      required: true
-*      content:
-*        application/x-www-form-urlencoded:
-*          schema:
-*            type: object
-*            properties:
-*              nickname:
-*                type: String
-*                description: "유저 고유 닉네임"
-*              password:
-*                type: int
-*                description: "비밀번호"
-* tags:
-*  - name: Users
-*    description: "회원가입/로그인 관련 API"
-*/
+ * @swagger
+ * /api/users:
+ *   post:
+ *     summary: 회원 가입
+ *     description: 새로운 사용자를 생성합니다.
+ *     tags:
+ *       - Users
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - nickname
+ *               - password
+ *               - name
+ *               - confirmPassword
+ *             properties:
+ *               nickname:
+ *                 type: string
+ *                 description: 유저 고유 닉네임 (3~10자, 알파벳 대소문자와 숫자)
+ *               password:
+ *                 type: string
+ *                 description: 비밀번호 (4~10자)
+ *               name:
+ *                 type: string
+ *                 description: 사용자 이름
+ *               confirmPassword:
+ *                 type: string
+ *                 description: 비밀번호 확인
+ *     responses:
+ *       '201':
+ *         description: 회원가입이 완료되었습니다.
+ *       '400':
+ *         description: "요청의 형식이 잘못되었습니다. (예: 비밀번호나 닉네임 형식 불일치)"
+ *       '401':
+ *         description: 비밀번호와 비밀번호 확인이 일치하지 않습니다.
+ *       '409':
+ *         description: 닉네임이 이미 존재하거나 비밀번호가 닉네임을 포함합니다.
+ */
 router.post("/users", async (req, res) => {
     const { nickname, password, name, confirmPassword } = req.body;
     const isExistUser = await Users.findOne({ where : { nickname } });
@@ -64,7 +81,36 @@ router.post("/users", async (req, res) => {
     return res.status(201).json({ message: "회원가입이 완료되었습니다." });
 });
 
-//로그인
+/**
+ * @swagger
+ * /api/login:
+ *   post:
+ *     summary: 로그인
+ *     description: 로그인 API
+ *     tags:
+ *       - Users
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - nickname
+ *               - password
+ *             properties:
+ *               nickname:
+ *                 type: string
+ *                 description: 유저 고유 닉네임 (3~10자, 알파벳 대소문자와 숫자)
+ *               password:
+ *                 type: string
+ *                 description: 비밀번호 (4~10자)
+ *     responses:
+ *       '201':
+ *         description: 로그인 성공!
+ *       '401':
+ *         description: 닉네임 또는 패스워드를 확인해주세요.
+ */
 router.post("/login", async (req, res) => {
     const { nickname, password } = req.body;
     const user = await Users.findOne({ where: { nickname } });
@@ -76,9 +122,9 @@ router.post("/login", async (req, res) => {
     const token = jwt.sign({
         userId: user.userId
     }, "customized_secret_key");
-    res.cookie("authorization", `Bearer ${token}`);
+    res.header('Access-Control-Expose-Headers', 'Authorization');
+    res.set("Authorization", `Bearer ${token}`);
     return res.status(200).json({ message: "로그인 성공!" });
-    
 });
 
 module.exports = router;
