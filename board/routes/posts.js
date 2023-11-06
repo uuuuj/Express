@@ -12,19 +12,7 @@ const router = express.Router();
    *  /api/posts:
    *    get: 
    *      summary: "전체 게시글 조회"
-   *      description: "등록된 모든 게시글을 조회한다"
-   *      responses:
-   *        200:
-   *          description: A list of posts.
-   *          content:
-   *            application/json:
-   *              schema:
-   *                type: object
-   *                properties:
-   *                  posts:
-   *                    type: array
-   *                    items:
-   *                      $ref: "#/models/Posts"
+   *      description: "등록된 모든 게시글을 등록 날짜가 최신인 순으로 조회한다"
    * tags:
    *  - name: Posts
    *    description: "게시글 관련 API"
@@ -52,7 +40,7 @@ const router = express.Router();
  *      content:
  *        application/json:
  *          schema:
- *            $ref: '#/models/Posts'
+ *            $ref: '#/models/posts.js'
  *    responses:
  *      201:
  *        description: Created post data.
@@ -84,7 +72,7 @@ router.post("/posts", authMiddleware, async (req, res) => {
    *      description: "postid를 통해 게시글을 조회한다"
    *      responses:
    *        200:
-   *          description: 
+   *          description: "게시글 데이터를 반환한다"
    *          content:
    *            application/json:
    *              schema:

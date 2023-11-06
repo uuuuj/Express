@@ -3,7 +3,31 @@ const { Users, UserInfos } = require("../models");
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 
-//회원가입
+/**
+* @swagger
+*
+* /api/users:
+*  post:
+*    summary: "회원가입 API"
+*    description: ""
+*    requestBody:
+*      description: 
+*      required: true
+*      content:
+*        application/x-www-form-urlencoded:
+*          schema:
+*            type: object
+*            properties:
+*              nickname:
+*                type: String
+*                description: "유저 고유 닉네임"
+*              password:
+*                type: int
+*                description: "비밀번호"
+* tags:
+*  - name: Users
+*    description: "회원가입/로그인 관련 API"
+*/
 router.post("/users", async (req, res) => {
     const { nickname, password, name, confirmPassword } = req.body;
     const isExistUser = await Users.findOne({ where : { nickname } });
