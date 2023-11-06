@@ -13,8 +13,8 @@ const router = express.Router();
    *    get: 
    *      summary: "전체 게시글 조회"
    *      description: "등록된 모든 게시글을 등록 날짜가 최신인 순으로 조회한다"
-   * tags:
-   *  - name: Posts
+   *      tags:
+   *        - Posts
    *    description: "게시글 관련 API"
    * 
    *    */
@@ -35,6 +35,8 @@ const router = express.Router();
  *  post:
  *    summary: "게시글 생성"
  *    description: "새로운 게시글을 생성합니다."
+ *    tags:
+ *      - Posts
  *    requestBody:
  *      required: true
  *      content:
@@ -70,6 +72,8 @@ router.post("/posts", authMiddleware, async (req, res) => {
    *    get: 
    *      summary: "게시글 상세 조회"
    *      description: "postid를 통해 게시글을 조회한다"
+   *      tags:
+   *       - Posts
    *      responses:
    *        200:
    *          description: "게시글 데이터를 반환한다"
@@ -82,10 +86,6 @@ router.post("/posts", authMiddleware, async (req, res) => {
    *                    type: array
    *                    items:
    *                      $ref: "#/models/Posts"
-   * tags:
-   *  - name: Posts
-   *    description: "게시글 관련 API"
-   * 
    *    */
 router.get('/posts/:postid', async (req, res) => {
   const { postid } = req.params;
@@ -113,6 +113,8 @@ router.get('/posts/:postid', async (req, res) => {
    *    put: 
    *      summary: "게시글 수정"
    *      description: "postid와 password를 통해 title, content를 수정한다"
+   *      tags:
+   *        - Posts
    *      responses:
    *        200:
    *          description: 
@@ -125,10 +127,6 @@ router.get('/posts/:postid', async (req, res) => {
    *                    type: array
    *                    items:
    *                      $ref: "#/models/Posts"
-   * tags:
-   *  - name: Posts
-   *    description: "게시글 관련 API"
-   * 
    *    */
 router.put('/posts/:postid', authMiddleware, async (req, res) => {
   const { postid } = req.params;
@@ -162,6 +160,8 @@ router.put('/posts/:postid', authMiddleware, async (req, res) => {
    *    delete: 
    *      summary: "게시글 삭제"
    *      description: "postid를 통해 게시글을 조회하고, 비밀번호 입력해서 게시글 삭제"
+   *      tags:
+   *        - Posts
    *      responses:
    *        200:
    *          description: 
@@ -174,10 +174,6 @@ router.put('/posts/:postid', authMiddleware, async (req, res) => {
    *                    type: array
    *                    items:
    *                      $ref: "#/models/Posts"
-   * tags:
-   *  - name: Posts
-   *    description: "게시글 관련 API"
-   * 
    *    */
 router.delete('/posts/:postid', authMiddleware, async (req, res) => {
   const { postid } = req.params;
