@@ -34,10 +34,12 @@ __Swaager__
 ## ERD   
 ![image](https://github.com/uuuuj/Express/assets/105343092/90173db4-7ae8-46ba-8f7e-429b6f580382)    
 
-## API 명세 (demo link)
-http://bumkyulee.store/api-docs   
-
 # Git Issue & Project 활용하여 Git 협업 연습   
 ## Git Issue & Project
   
-![image](https://github.com/uuuuj/Express/assets/105343092/21be6d41-b550-4c18-8925-cc4fb7694d53)   
+![image](https://github.com/uuuuj/Express/assets/105343092/21be6d41-b550-4c18-8925-cc4fb7694d53)    
+
+## API 명세 (demo link)
+http://bumkyulee.store/api-docs   
+
+
